@@ -1,0 +1,1 @@
+This module keeps all the functionality for Company Testimonial functionality which is not provided by Views. This includes functionality such as approval of testimonials before a testimonial is available to the public for viewing.
