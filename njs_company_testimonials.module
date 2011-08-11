@@ -56,7 +56,6 @@ function njs_unapprove_testimonial_form() {
 
 function njs_approve_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
-  //print_r($n->field_testimonial_approved[0]);
   $n->field_testimonial_approved[0][value] = 'approved';
   node_save($n);
   drupal_set_message('Testimonial has been set public');
@@ -65,7 +64,6 @@ function njs_approve_testimonial_form_submit($form_id, $form_values) {
 
 function njs_unapprove_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
-  //print_r($n->field_testimonial_approved[0]);
   $n->field_testimonial_approved[0][value] = 'not-approved';
   node_save($n);
   drupal_set_message('Testimonial has been set public');
