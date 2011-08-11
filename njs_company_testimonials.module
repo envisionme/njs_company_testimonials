@@ -3,12 +3,17 @@
 function njs_company_testimonials_menu() {
   $items = array();
   $items['user/%/approve-testimonial'] = array(
-    'page callback' => 'njs_approve_testimonial_page',
+    'page callback'   => 'njs_approve_testimonial_page',
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
   );
   $items['user/%/unapprove-testimonial'] = array(
-    'page callback' => 'njs_approve_testimonial_page',
+    'page callback'   => 'njs_approve_testimonial_page',
+    'access callback' => TRUE,
+    'type'            => MENU_CALLBACK,
+  );
+  $items['user/%/delete-testimonial'] = array(
+    'page callback'   => 'njs_delete_testimonial_page',
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
   );
@@ -86,6 +91,12 @@ function njs_unapprove_testimonial_form_submit($form_id, $form_values) {
   $n->field_testimonial_approved[0][value] = 'not-approved';
   node_save($n);
   drupal_set_message('Testimonial has been set public');
+  drupal_goto('user/'. arg(1) .'/admin');
+}
+
+function njs_delete_testimonial_form_submit($form_id, $form_values) {
+  node_delete(arg(3));
+  drupal_set_message('Testimonial has been deleted');
   drupal_goto('user/'. arg(1) .'/admin');
 }
 
