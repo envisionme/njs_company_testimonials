@@ -27,6 +27,12 @@ function njs_unapprove_testimonial_page() {
   return $output;
 }
 
+function njs_delete_testimonial_page() {
+  $output .= '<p>Are you sure you want to delete this testimonial? Once you have deleted it is deleted forever and cannot be retreved in future.</p>';
+  $output .= drupal_get_form('njs_delete_testimonial_form');
+  return $output;
+}
+
 
 function njs_approve_testimonial_form() {
   $form['submit'] = array(
@@ -54,6 +60,19 @@ function njs_unapprove_testimonial_form() {
   return $form;
 }
 
+function njs_delete_testimonial_form() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Delete Testimonial'),
+  );
+  $form['cancel'] = array(
+    '#type' => 'button',
+    '#attributes' => array('onClick' => 'location.replace("'. referer_uri .'"); return false;'),
+    '#value' => t('Cancel'),
+  );
+  return $form;
+}
+
 function njs_approve_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
   $n->field_testimonial_approved[0][value] = 'approved';
@@ -69,6 +88,5 @@ function njs_unapprove_testimonial_form_submit($form_id, $form_values) {
   drupal_set_message('Testimonial has been set public');
   drupal_goto('user/'. arg(1) .'/admin');
 }
-
 
 ?>
