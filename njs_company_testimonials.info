@@ -1,0 +1,7 @@
+name = NJS Company Testimonials
+description = Set of functions and page callbacks to enable approval of testimonials before made public.
+core = 6.x
+package = NoJoShmo - Custom Modules
+
+version = "6.x-1-dev"
+core = "6.x"
