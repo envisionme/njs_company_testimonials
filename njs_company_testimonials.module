@@ -95,7 +95,10 @@ function njs_unapprove_testimonial_form_submit($form_id, $form_values) {
 }
 
 function njs_delete_testimonial_form_submit($form_id, $form_values) {
-  node_delete(arg(3));
+  $node = node_load(arg(3));
+  $node->status = 0;
+  //node_delete(arg(3));
+  node_save($node);
   drupal_set_message('Testimonial has been deleted');
   drupal_goto('user/'. arg(1) .'/admin');
 }
