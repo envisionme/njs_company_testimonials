@@ -72,7 +72,7 @@ function njs_delete_testimonial_form() {
   );
   $form['cancel'] = array(
     '#type' => 'button',
-    '#attributes' => array('onClick' => 'location.replace("'. referer_uri .'"); return false;'),
+    '#attributes' => array('onClick' => 'location.replace("'. referer_uri() .'"); return false;'),
     '#value' => t('Cancel'),
   );
   return $form;
