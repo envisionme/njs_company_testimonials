@@ -82,7 +82,7 @@ function njs_approve_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
   $n->field_testimonial_approved[0][value] = 'approved';
   node_save($n);
-  drupal_set_message('Testimonial has been set public');
+  drupal_set_message('Testimonial has been set public. It will now show on your profile.');
   drupal_goto('user/'. arg(1) .'/admin');
 }
 
@@ -90,7 +90,7 @@ function njs_unapprove_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
   $n->field_testimonial_approved[0][value] = 'not-approved';
   node_save($n);
-  drupal_set_message('Testimonial has been set public');
+  drupal_set_message('Testimonial has been set private. It will not show on your profile any longer.');
   drupal_goto('user/'. arg(1) .'/admin');
 }
 
