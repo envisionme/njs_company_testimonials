@@ -1,5 +1,4 @@
 <?php
-
 function njs_company_testimonials_menu() {
   $items = array();
   $items['user/%/approve-testimonial'] = array(
@@ -8,7 +7,7 @@ function njs_company_testimonials_menu() {
     'type'            => MENU_CALLBACK,
   );
   $items['user/%/unapprove-testimonial'] = array(
-    'page callback'   => 'njs_approve_testimonial_page',
+    'page callback'   => 'njs_unapprove_testimonial_page',
     'access callback' => TRUE,
     'type'            => MENU_CALLBACK,
   );
@@ -55,7 +54,7 @@ function njs_approve_testimonial_form() {
 function njs_unapprove_testimonial_form() {
   $form['submit'] = array(
     '#type' => 'submit',
-    '#value' => t('Show on Profile'),
+    '#value' => t('Hide on Profile'),
   );
   $form['cancel'] = array(
     '#type' => 'button',
@@ -102,5 +101,3 @@ function njs_delete_testimonial_form_submit($form_id, $form_values) {
   drupal_set_message('Testimonial has been deleted');
   drupal_goto('user/'. arg(1) .'/admin');
 }
-
-?>
