@@ -81,6 +81,27 @@ function njs_approve_testimonial_form_submit($form_id, $form_values) {
   $n = node_load(array( 'nid' => arg(3) ));
   $n->field_testimonial_approved[0][value] = 'approved';
   node_save($n);
+
+
+  $message_id = 'heartbeat_edit_node';
+
+  $variables = array(
+    '@username' => l(user_load($n->uid)->name, 'user/' . $n->uid),
+    '@node_type' => $n->type,
+    '@node_title' => l($n->title, 'node/' . $n->nid),
+  );	
+
+  $temp_uid = $n->uid;
+  $n->uid = arg(1);
+  node_save($n);
+  //print_r($n);
+  //break;
+
+  heartbeat_api_log($message_id, $n->uid, 0, $n->nid, 0, $variables);
+
+  //$n->uid = $temp_uid;
+  //node_save($n);
+
   drupal_set_message('Testimonial has been set public. It will now show on your profile.');
   drupal_goto('user/'. arg(1) .'/admin');
 }
