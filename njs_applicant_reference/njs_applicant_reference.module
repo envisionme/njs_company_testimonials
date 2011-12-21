@@ -1,0 +1,124 @@
+<?php
+function njs_applicant_reference_menu() {
+  $items = array();
+  $items['user/%/approve-reference'] = array(
+    'page callback'   => 'njs_approve_reference_page',
+    'access callback' => TRUE,
+    'type'            => MENU_CALLBACK,
+  );
+  $items['user/%/unapprove-reference'] = array(
+    'page callback'   => 'njs_unapprove_reference_page',
+    'access callback' => TRUE,
+    'type'            => MENU_CALLBACK,
+  );
+  $items['user/%/delete-reference'] = array(
+    'page callback'   => 'njs_delete_reference_page',
+    'access callback' => TRUE,
+    'type'            => MENU_CALLBACK,
+  );
+  return $items;
+}
+
+function njs_approve_reference_page() {
+  $output .= '<p>Click "Approve Reference" below to make this reference show up on your profile as public content.</p>';
+  $output .= drupal_get_form('njs_approve_reference_form');
+  return $output;
+}
+
+function njs_unapprove_reference_page() {
+  $output .= '<p>Click "Disapprove Reference" below to avoid this reference showing up on your public profile.</p>';
+  $output .= drupal_get_form('njs_unapprove_reference_form');
+  return $output;
+}
+
+function njs_delete_reference_page() {
+  $output .= '<p>Are you sure you want to delete this reference? Once you have deleted it is deleted forever and cannot be retreved in future.</p>';
+  $output .= drupal_get_form('njs_delete_reference_form');
+  return $output;
+}
+
+
+function njs_approve_reference_form() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Approve Reference'),
+  );
+  $form['cancel'] = array(
+    '#type' => 'button',
+    '#attributes' => array('onClick' => 'location.replace("'. referer_uri() .'"); return false;'),
+    '#value' => t('Cancel'),
+  );
+  return $form;
+}
+
+function njs_unapprove_reference_form() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Disapprove Reference'),
+  );
+  $form['cancel'] = array(
+    '#type' => 'button',
+    '#attributes' => array('onClick' => 'location.replace("'. referer_uri() .'"); return false;'),
+    '#value' => t('Cancel'),
+  );
+  return $form;
+}
+
+function njs_delete_reference_form() {
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Delete reference'),
+  );
+  $form['cancel'] = array(
+    '#type' => 'button',
+    '#attributes' => array('onClick' => 'location.replace("'. referer_uri() .'"); return false;'),
+    '#value' => t('Cancel'),
+  );
+  return $form;
+}
+
+function njs_approve_reference_form_submit($form_id, $form_values) {
+  $n = node_load(array( 'nid' => arg(3) ));
+  $n->field_approve_reference[0][value] = 'approved';
+  node_save($n);
+
+
+  $message_id = 'heartbeat_edit_node';
+
+  $variables = array(
+    '@username' => l(user_load($n->uid)->name, 'user/' . $n->uid),
+    '@node_type' => $n->type,
+    '@node_title' => l($n->title, 'node/' . $n->nid),
+  );	
+
+  $temp_uid = $n->uid;
+  $n->uid = arg(1);
+  node_save($n);
+  //print_r($n);
+  //break;
+
+  heartbeat_api_log($message_id, $n->uid, 0, $n->nid, 0, $variables);
+
+  //$n->uid = $temp_uid;
+  //node_save($n);
+
+  drupal_set_message('Reference has been set public. It will now show on your profile.');
+  drupal_goto('user/'. arg(1) .'/admin');
+}
+
+function njs_unapprove_reference_form_submit($form_id, $form_values) {
+  $n = node_load(array( 'nid' => arg(3) ));
+  $n->field_approve_reference[0][value] = 'not-approved';
+  node_save($n);
+  drupal_set_message('Reference has been set private. It will not show on your profile any longer.');
+  drupal_goto('user/'. arg(1) .'/admin');
+}
+
+function njs_delete_reference_form_submit($form_id, $form_values) {
+  $node = node_load(arg(3));
+  $node->status = 0;
+  //node_delete(arg(3));
+  node_save($node);
+  drupal_set_message('Reference has been deleted');
+  drupal_goto('user/'. arg(1) .'/admin');
+}
